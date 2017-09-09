@@ -1,7 +1,7 @@
 <?php
-  const host = 'localhost';
-  const username = 'root';
-  const pass = '';
+  const HOST = 'localhost';
+  const USERNAME = 'root';
+  const PASSWORD = '';
 
-  const db = 'bla';
+  const DATABASE_NAME = '';
 ?>
