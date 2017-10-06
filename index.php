@@ -24,13 +24,14 @@
     }
     return 'UPDATE ' . $dbTable . ' SET ' . implode($setList, ',') . ' WHERE ' . $rs->fetch_assoc()['Column_name'] . '=' . $id;
   }
-  function buildDeleteQuery($dbTable, $params, $id){
+  function buildDeleteQuery($dbTable, $id){
     global $conn;
     $rs = $conn->query("SHOW INDEX FROM $dbTable WHERE Key_name = 'PRIMARY'");
     return 'DELETE FROM ' . $dbTable . ' WHERE ' . $rs->fetch_assoc()['Column_name'] . '=' . $id;
   }
 
   function processParams($arr){
+    $arr = array($arr);
     $keys = array();
     $values = array();
     foreach ($arr as $key => $value) {
@@ -65,25 +66,22 @@
   }
   $params = '';
   switch ($method) {
-  case 'PUT':
-    echo 'EDIT';
-    $params = processParams($_PUT);
-    $conn->query(buildUpdateQuery($table, $_PUT, 22));
-    break;
   case 'POST':
-    echo 'CREATE';
     $params = processParams($_POST);
     $conn->query(buildInsertQuery($table, $params));
     break;
   case 'GET':
-    $params = processParams($_GET);
     header('Content-Type: application/json');
+    $params = processParams($_GET);
     echo json_encode(isset($id) ? getTableRecord($table, $id) : getAllTableRecords($table));
     break;
+  case 'PUT':
+    $params = processParams(json_decode(file_get_contents("php://input")), true);
+    $conn->query(buildUpdateQuery($table, $params, $_GET['id']));
+    break;
   case 'DELETE':
-    echo 'DELETE';
-    $params = processParams($_DELETE);
-    $conn->query(buildDeleteQuery($table, $params));
+    header('Content-Type: application/json');
+    echo json_encode($conn->query(buildDeleteQuery($table, $_GET['id'])));
     break;
   case 'HEAD':
     echo 'E';

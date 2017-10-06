@@ -1,3 +1,6 @@
+<?php
+  include_once('config.php');
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -7,7 +10,7 @@
   </head>
   <body>
     <header>
-      <label>Database</label>
+      <label><?php echo DATABASE_NAME; ?></label>
       <input type="text">
     </header>
     <footer>
