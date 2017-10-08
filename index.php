@@ -8,7 +8,9 @@
 
   /*Functions*/
   function buildInsertQuery($dbTable, $params){
-    return 'INSERT INTO ' . $dbTable .'(' . $params[0] . ') VALUES(' . $params[1] . ')';
+    $q = 'INSERT INTO ' . $dbTable .'(' . $params[0] . ') VALUES(' . $params[1] . ')';
+    echo $q;
+    return $q;
   }
   function buildUpdateQuery($dbTable, $params, $id){
     global $conn;
@@ -31,7 +33,7 @@
   }
 
   function processParams($arr){
-    $arr = array($arr);
+    print_r($arr);
     $keys = array();
     $values = array();
     foreach ($arr as $key => $value) {
@@ -67,12 +69,12 @@
   $params = '';
   switch ($method) {
   case 'POST':
+    header('Content-Type: application/json');
     $params = processParams($_POST);
-    $conn->query(buildInsertQuery($table, $params));
+    echo ($conn->query(buildInsertQuery($table, $params)));
     break;
   case 'GET':
     header('Content-Type: application/json');
-    $params = processParams($_GET);
     echo json_encode(isset($id) ? getTableRecord($table, $id) : getAllTableRecords($table));
     break;
   case 'PUT':

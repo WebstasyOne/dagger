@@ -3,5 +3,5 @@
   const USERNAME = 'root';
   const PASSWORD = '';
 
-  const DATABASE_NAME = 'dbx';
+  const DATABASE_NAME = 'latino_pizza';
 ?>
